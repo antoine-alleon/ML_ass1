@@ -32,11 +32,12 @@ def load_data(fileName, sub_sample=True, add_outlier=False):
     return data
 
 def process_data(x):
-    Num_samples=x.shape(0)
+    num_samples=x.shape[0]
     x_mean=np.mean(x,axis=0)
-    x=x-x_mean[:,None]
+    x=x-x_mean[:,None].T
     x_dev=np.std(x,axis=0)
-    x=x/x_dev[:,None]
+    x=x/x_dev[:,None].T
+    np.delete(x,[0,1],1)
     xp = np.c_[np.ones(num_samples), x]
     
     return xp
