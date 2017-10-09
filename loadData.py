@@ -31,6 +31,15 @@ def load_data(fileName, sub_sample=True, add_outlier=False):
     #return height, weight, gender
     return data
 
+def process_data(x):
+    Num_samples=x.shape(0)
+    x_mean=np.mean(x,axis=0)
+    x=x-x_mean[:,None]
+    x_dev=np.std(x,axis=0)
+    x=x/x_dev[:,None]
+    xp = np.c_[np.ones(num_samples), x]
+    
+    return xp
 
 def standardize(x):
     """Standardize the original data set."""
