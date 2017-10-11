@@ -31,16 +31,32 @@ def load_data(fileName, sub_sample=True, add_outlier=False):
     #return height, weight, gender
     return data
 
-def process_data(x):
+def load_data_y(fileName):
+    """Load data and convert it to the metrics system."""
+    path_dataset = fileName #nameofthefiletoimport 
+    data = np.genfromtxt(
+        path_dataset, delimiter=",", skip_header=1, usecols=[1], dtype = str) #use only column 1 and import type str data
+    return data
+
+def format_data(x):
     num_samples=x.shape[0]
     x_mean=np.mean(x,axis=0)
     x=x-x_mean[:,None].T
     x_dev=np.std(x,axis=0)
     x=x/x_dev[:,None].T
-    np.delete(x,[0,1],1)
+    x=np.delete(x,[0,1],1)
     xp = np.c_[np.ones(num_samples), x]
     
     return xp
+
+def format_data_y(x):
+    y = np.array(range(len(x)))
+    for i in range(len(x)):
+        if (x[i]=="b"):
+            y[i]=1
+        else:
+            y[i]=-1
+    return y
 
 def standardize(x):
     """Standardize the original data set."""
@@ -59,7 +75,7 @@ def build_model_data(height, weight):
     tx = np.c_[np.ones(num_samples), x]
     return y, tx
 
-
+'''
 def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
     """
     Generate a minibatch iterator for a dataset.
@@ -84,4 +100,3 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
         end_index = min((batch_num + 1) * batch_size, data_size)
         if start_index != end_index:
             yield shuffled_y[start_index:end_index], shuffled_tx[start_index:end_index]
-            '''
